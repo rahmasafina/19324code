@@ -6,6 +6,7 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <SFE_BMP180.h>
+// define barmetric sesnsor.
 SFE_BMP180 pressure;
 #define ALTITUDE 12.0  // define the Altitude in meters to be used in pressure measuring.
 #define SENSOR D5   // define the digital pin of the flow sesnor.
@@ -13,15 +14,15 @@ long currentMillis = 0;
 long previousMillis = 0;
 int interval = 1000;
 boolean ledState = LOW;
-float calibrationFactor = 4.5; //
+float calibrationFactor = 4.5; // callibration factor of flow sesnor
 volatile byte pulseCount;
 byte pulse1Sec = 0;
-float flowRate; //
+float flowRate; // define a variable named flow rate as float
 unsigned long flowMilliLitres;
 unsigned int totalMilliLitres;
-float flowLitres;  //
-float totalLitres; //
-float PressureDifference;//
+float flowLitres;  // define a variable named flowLitres as float
+float totalLitres; // define a variable named totalLitres as float
+float PressureDifference;//define a variable named PressureDiffierence as float
 int sw = 0;
 double p0,P,pold,T ;
 //------- WI-FI details ----------//
@@ -52,7 +53,7 @@ void setup()
  
   WiFi.mode(WIFI_STA); 
   ThingSpeak.begin(client);  // Initialize ThingSpeak
-  
+  //intialize flow sesnor
    pulseCount = 0;
   flowRate = 0.0;
   flowMilliLitres = 0;
@@ -75,7 +76,6 @@ void setup()
     while (1)
       ;  
   }
-  
   
 }
 
@@ -127,7 +127,7 @@ Serial.println();
   Serial.print("provided altitude: ");
   Serial.print(ALTITUDE, 0);
   Serial.print(" meters, ");
-
+//condition for switching between two sesnors
   if (sw) {
     digitalWrite(12, HIGH);
     digitalWrite(13, LOW);
