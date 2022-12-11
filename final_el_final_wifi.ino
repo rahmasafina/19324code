@@ -1,26 +1,26 @@
-#include <ESP8266WiFi.h>
-#include "secrets.h"
+// enter all needed libraries needed
+#include "secrets.h" // where wifi and channel credentials lie
 #include "ThingSpeak.h" // always include thingspeak header file after other header files and custom macros
-#include <ESP8266WiFi.h>
-#include <SPI.h>
-#include <Wire.h>
-#include <SFE_BMP180.h>
+#include <ESP8266WiFi.h> // library of the esp8266
+#include <SPI.h> 
+#include <Wire.h>  
+#include <SFE_BMP180.h> // library of the barametric sensor
 SFE_BMP180 pressure;
 #define ALTITUDE 12.0  // Altitude in meters
-#define SENSOR D5
+#define SENSOR D5 // define a digital pin for the flow sensor
  long currentMillis = 0;
 long previousMillis = 0;
 int interval = 1000;
 boolean ledState = LOW;
-float calibrationFactor = 4.5;
+float calibrationFactor = 4.5; // define callibration factor of the flow sensor
 volatile byte pulseCount;
 byte pulse1Sec = 0;
-float flowRate;
+float flowRate;  // define a varibale called flowRate
 unsigned long flowMilliLitres;
 unsigned int totalMilliLitres;
-float flowLitres;
-float totalLitres;
-float PressureDifference;
+float flowLitres; // define a varibale called flowLitres
+float totalLitres;  // define a varibale called totalLitres
+float PressureDifference; // define a varibale called PressureDifference
 int sw = 0;
 double p0,P,pold,T ;
 void IRAM_ATTR pulseCounter()
@@ -28,13 +28,13 @@ void IRAM_ATTR pulseCounter()
   pulseCount++;
 }
 
-char ssid[] = SECRET_SSID;   // your network SSID (name) 
-char pass[] = SECRET_PASS;   // your network password
-int keyIndex = 0;            // your network key Index number (needed only for WEP)
+char ssid[] = SECRET_SSID;   //  network SSID (name) 
+char pass[] = SECRET_PASS;   // network password
+int keyIndex = 0;            //  network key Index number (needed only for WEP)
 WiFiClient  client;
 
-unsigned long myChannelNumber = SECRET_CH_ID;
-const char* myWriteAPIKey = SECRET_WRITE_APIKEY;
+unsigned long myChannelNumber = SECRET_CH_ID;  //  channel ID
+const char* myWriteAPIKey = SECRET_WRITE_APIKEY; // channel API key
 
 // Initialize our values
 int number1 = 0;
@@ -51,14 +51,14 @@ void setup() {
  
   WiFi.mode(WIFI_STA); 
   ThingSpeak.begin(client);  // Initialize ThingSpeak
-  
+  // initialize flowsensor
    pulseCount = 0;
   flowRate = 0.0;
   flowMilliLitres = 0;
   totalMilliLitres = 0;
   previousMillis = 0;
   attachInterrupt(digitalPinToInterrupt(SENSOR), pulseCounter, FALLING);
-
+// define pins of pressure sesnsors
    pinMode(12, OUTPUT);
   digitalWrite(12, HIGH);
   pinMode(13, OUTPUT);
@@ -213,7 +213,7 @@ Serial.println();
 {
   // set the fields with the values
   ThingSpeak.setField(1,PressureDifference);//sensor 1 
-  ThingSpeak.setField(2,flowRate);
+  ThingSpeak.setField(2,flowRate); //sesnor 2
   ThingSpeak.setField(3,number3);
   ThingSpeak.setField(4,number4);
 
@@ -249,6 +249,6 @@ Serial.println();
   number3 = random(0,100);
   number4 = random(0,100);
   
-  delay(1000); // Wait 20 seconds to update the channel again
+  delay(1000); // Wait 1 second to update the channel again
 }
 }
